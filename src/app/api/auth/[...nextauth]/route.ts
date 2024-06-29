@@ -1,32 +1,40 @@
-import api from "@/api";
-import NextAuth, { NextAuthOptions } from "next-auth"
-import CredentialsProvider from "next-auth/providers/credentials"
+import NextAuth, { NextAuthOptions } from 'next-auth'
+import CredentialsProvider from 'next-auth/providers/credentials'
+
+import api from '@/api'
 
 const nextAuthOptions: NextAuthOptions = {
   providers: [
     CredentialsProvider({
-      name: "credentials",
+      name: 'credentials',
       credentials: {
         identifier: { label: 'credential', type: 'text' },
-        password: { label: 'password', type: 'password' }
+        password: { label: 'password', type: 'password' },
       },
 
-      async authorize(credentials, req) {
-        const response = await api.post('auth/local', { identifier: credentials?.identifier, password: credentials?.password });
+      async authorize(credentials) {
+        const response = await api.post('auth/local', {
+          identifier: credentials?.identifier,
+          password: credentials?.password,
+        })
 
-        const user = await response.data.user;
+        api.defaults.headers.Authorization = `Bearer ${response.data.jwt}`
+        const user = await response.data.user
 
+        const userTest = await api.get(`users/${user.id}`)
+
+        console.log('🚀 ~ authorize ~ userTest:', userTest.data)
         if (user && response.statusText === 'OK') {
           return user
         }
 
         return null
-      }
-    })
+      },
+    }),
   ],
   pages: {
     signIn: '/auth',
-  }
+  },
 }
 
 const handler = NextAuth(nextAuthOptions)
