@@ -49,7 +49,7 @@ export default function Auth() {
           <form>
             <div className="grid w-full items-center gap-4">
               <div className="flex flex-col space-y-1.5">
-                <Label htmlFor="name">Email</Label>
+                <Label htmlFor="name">Username</Label>
                 <Input
                   id="name"
                   placeholder="Digite seu e-mail"
@@ -59,6 +59,7 @@ export default function Auth() {
               <div className="flex flex-col space-y-1.5">
                 <Label htmlFor="name">Senha</Label>
                 <Input
+                  type="password"
                   id="name"
                   placeholder="Digite sua senha"
                   onChange={(e) => setPassword(e.target.value)}
