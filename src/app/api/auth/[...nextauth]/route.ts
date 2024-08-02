@@ -21,7 +21,7 @@ const nextAuthOptions: NextAuthOptions = {
         api.defaults.headers.Authorization = `Bearer ${response.data.jwt}`
         const user = await response.data.user
 
-        const userTest = await api.get(`users/${user.id}`)
+        const userTest = await api.get(`users/${user.id}?populate=*`)
 
         console.log('🚀 ~ authorize ~ userTest:', userTest.data)
         if (user && response.statusText === 'OK') {
